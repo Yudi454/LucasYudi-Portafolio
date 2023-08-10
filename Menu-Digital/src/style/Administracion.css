@@ -1,0 +1,11 @@
+table{
+    width: fit-content !important;
+}
+
+.Contenedor-Tabla{
+    overflow-x: auto;
+}
+
+.imagenTablas{
+    width: 14vh !important;
+}

@@ -1,0 +1,36 @@
+.EtiquetaNew{
+    background-color: #ffc107;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.btn-gray {
+    min-width: 130px;
+    height: 40px;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 1s ease;
+    position: relative;
+    border-radius: 5px;
+    z-index: 0;
+    border: 2px solid #53777a;
+    color: #53777a;
+  }
+  .btn-gray:hover {
+    color: #fff;
+  }
+  .btn-gray:hover:after {
+    width: 100%;
+  }
+  .btn-gray:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    transition: all 0.7s ease;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: #53777a;
+  }

@@ -1,0 +1,80 @@
+.btn-Amarillo {
+    display: inline-block;
+    height: 40px;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 1s ease;
+    position: relative;
+    border-radius: 5px;
+    z-index: 0;
+    border: 2px solid #ffc107;
+    color: #ffc107;
+    white-space: nowrap;
+}
+
+.btn-Amarillo:hover {
+    color: #fff;
+}
+
+.btn-Amarillo:hover::after {
+    width: 100%;
+}
+
+.btn-Amarillo::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    transition: all 0.7s ease;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: #ffc107;
+}
+
+
+.btn-Rojo{
+    display: inline-block;
+    height: 40px;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 1s ease;
+    position: relative;
+    border-radius: 5px;
+    z-index: 0;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    white-space: nowrap;
+
+}
+
+.btn-Rojo:hover{
+    color: #fff;
+}
+
+.btn-Rojo:hover::after{
+    width: 100%;
+}
+
+.btn-Rojo::after{
+    content: "";
+        position: absolute;
+        z-index: -1;
+        transition: all 0.7s ease;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 100%;
+        background: #dc3545;
+}
+
+table{
+    width: fit-content !important;
+}
+
+.Container-Tabla{
+    overflow-x: auto;
+
+}

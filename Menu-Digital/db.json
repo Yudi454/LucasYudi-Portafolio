@@ -1,0 +1,24 @@
+{
+    "Comidas": [
+      {
+        "Nombre": "Hamburgesa",
+        "Precio": "750",
+        "Imagen": "./ImagenesDePrueba/hamburguesa.jpg",
+        "id": 1
+      }
+    ],
+    "Bebidas" : [
+      {
+        "Nombre": "Coca-Cola 500ml",
+        "Precio": "400",
+        "Imagen": "./ImagenesDePrueba/Coca-500ml.png",
+        "id": 2
+      }
+    ],
+    "Usuario" : [
+      {
+        "Nombre" : "Admin",
+        "Contraseña" : "Admin123"
+      }
+    ]
+  }
