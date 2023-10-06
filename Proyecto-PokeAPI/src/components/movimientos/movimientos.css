@@ -1,0 +1,19 @@
+.divTabla{
+    overflow-x: auto;
+    display: block;
+    margin: 4vh;
+
+}
+
+table{
+    width: fit-content !important;
+}
+
+.contenedorDeTabla{
+    display: flex;
+    justify-content: center;
+}
+
+.imgGeneracion{
+    width: 7vh;
+}

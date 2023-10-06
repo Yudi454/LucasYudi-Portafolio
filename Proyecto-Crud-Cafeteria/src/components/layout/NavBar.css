@@ -1,0 +1,14 @@
+.NombreUsuario {
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+    margin: 0;
+  }
+
+.OpcionesUsuario{
+    background-color: #ffc107 !important;
+
+}
+
+div.dropdown-menu.show {
+    background-color: #ffc107 !important;
+    border: 1px solid black;
+  }

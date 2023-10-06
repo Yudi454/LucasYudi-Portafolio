@@ -1,0 +1,46 @@
+{
+  "Products": [
+    {
+      "ProductoNombre": "Cafe",
+      "Precio": "$750",
+      "Descripcion": "aaaaaaaaaaaaaaaa",
+      "Url": "http://cualquiercosa.com",
+      "Categoria": "Bebida Caliente",
+      "id": 3
+    }
+  ],
+  "Usuarios": [
+    {
+      "Nombre": "Lucas",
+      "Apellido": "Yudi",
+      "Email": "lucasyudi@gmail.com",
+      "Contraseña": "Aa345678",
+      "id": 1
+    },
+    {
+      "Nombre": "Cafe",
+      "Apellido": "afsdsdsdsdsd",
+      "Email": "lucasyudi2@gmail.com",
+      "Contraseña": "Aa345678",
+      "id": 2
+    },
+    {
+      "Nombre": "Cafe",
+      "Apellido": "afsdsdsdsdsds",
+      "Email": "lucasyudi3@gmail.com",
+      "Contraseña": "Aa345678",
+      "id": 3
+    },
+    {
+      "Nombre": "Cafe",
+      "Apellido": "afsdsdsdsdsds",
+      "Email": "lucasyudi4@gmail.com",
+      "Contraseña": "Aa345678",
+      "id": 4
+    },{
+      "Nombre" : "Admin",
+      "Email" : "admin1@gmail.com",
+      "Contraseña" : "Admin678"
+    }
+  ]
+}
