@@ -1,3 +1,4 @@
+import Footer from "./components/Footer"
 import NavBar from "./components/NavBar"
 import { ProductosProvider } from "./context/Context"
 import Rutas from "./routes/Rutas"
@@ -12,6 +13,7 @@ function App() {
       <main>
         <Rutas />
       </main>
+      <Footer />
     </ProductosProvider>
     </>
   )
