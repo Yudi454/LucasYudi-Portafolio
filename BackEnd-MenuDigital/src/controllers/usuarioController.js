@@ -1,12 +1,13 @@
-const Usuarios = require("../models/usuarioModel")
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const usuarioModel = require("../models/usuarioModel");
 
 //GET
 const getUsers = async (req,res) => {
     console.log("pase get users");
     try {
-        const users = await Usuarios.find()
+        const users = await usuarioModel.find()
         res.status(200).json(users)
     } catch (error) {
         console.log("Error:",error);
@@ -18,7 +19,7 @@ const register = async (req,res) => {
     console.log("pase por registro");
     try {
         const {name,password} = req.body
-        const users = await Usuarios.find()
+        const users = await usuarioModel.find()
         let userRepetido = users.find((user) => user.usuario == usuario)
         if (userRepetido) {
             res.status(200).json({message: "Usuario ya creado"})
@@ -39,7 +40,7 @@ const register = async (req,res) => {
 const login = async (req,res) => {
     console.log("pase por login");
     try {
-        const user = await Usuarios.findOne({name : req.body.name})
+        const user = await usuarioModel.findOne({name : req.body.name})
         if (!user) {
             console.log("name no es correcto");
             return res.status(404).json({message: "Usuarios y/o contraseña incorrectos"})
@@ -59,4 +60,35 @@ const login = async (req,res) => {
     }
 }
 
-module.exports = {getUsers,register,login}
+//PUT
+const editarUsuario = async ( req,res) => {
+    console.log("pase por editar usuario");
+    try {
+        const _id = req.params.id
+        const {name, passwordHash} = req.body
+        const user = await usuarioModel.findById(_id)
+        if (user) {
+            user.name = name || user.name;
+            user.passwordHash = passwordHash || user.passwordHash
+            await user.save()
+            res.status(200).json({message: "Usuario editado con exito"})
+        } else {
+            res.status(200).json({message: "Usuario no encontrado"})
+        }
+    } catch (error) {
+        res.status(404).json({message: `${error}`})
+    }
+}
+
+//DELETE
+const eliminarUsuario = async (req,res) => {
+    console.log("pase por eliminar usuario");
+    try {
+        const id = req.params.id
+        await usuarioModel.findOneAndDelete({_id: id})
+        res.status(200).json({message: "Usuario eliminado con exito"})
+    } catch (error) {
+        res.status(404).json({message: `${error}`})
+    }
+}
+module.exports = {getUsers,register,login,editarUsuario,eliminarUsuario}

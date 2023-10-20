@@ -10,4 +10,10 @@ router.get("/usuarios", usuarioController.getUsers)
 router.post("/registro", usuarioController.register)
 router.post("/login", usuarioController.login)
 
+//Put
+router.put("/usuarios/:id", usuarioController.editarUsuario)
+
+//Delete
+router.delete("/usuarios/:id", usuarioController.eliminarUsuario)
+
 module.exports = router
