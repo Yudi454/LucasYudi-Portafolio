@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const upload = require("../libs/storage")
 
 const comidaController = require("../controllers/comidaController")
 
@@ -7,7 +8,7 @@ const comidaController = require("../controllers/comidaController")
 router.get("/Comida", comidaController.getComida)
 
 //Post
-router.post("/Comida", comidaController.crearComida)
+router.post("/Comida",upload.single(`Image`), comidaController.crearComida)
 
 //Put
 router.put("/Comida/:id", comidaController.editarComida)

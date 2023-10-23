@@ -4,8 +4,19 @@ table{
 
 .Contenedor-Tabla{
     overflow-x: auto;
+    display: flex;
+    justify-content: center;
 }
 
 .imagenTablas{
     width: 14vh !important;
+}
+
+  /* Resolución para Pantallas de Celulares */  
+  @media (max-width: 767px) {
+    .Contenedor-Tabla{
+        overflow-x: auto;
+        display: block;
+    }
+      
 }

@@ -1,5 +1,8 @@
-const moongose = require("mongoose");
-const { Schema } = moongose;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
+const host = process.env.HOST;
+const port = process.env.PORT;
 
 const comida = new Schema({
   name: {
@@ -11,8 +14,8 @@ const comida = new Schema({
   Price: {
     type: Number,
     required: true,
-    min: 100,
-    max: 100000
+    min: 1,
+    max: 10000
   },
   Image: {
     type: String,
@@ -27,6 +30,10 @@ const comida = new Schema({
     collection: "Comidas"    
 });
 
-const comidaModal = moongose.model("Comidas", comida);
+comida.methods.setImgUrl = function setImgUrl (filename) {
+ this.Image = `${host}:${port}/public/${filename}`
+}
+
+const comidaModal = mongoose.model("Comidas", comida);
 
 module.exports = comidaModal;

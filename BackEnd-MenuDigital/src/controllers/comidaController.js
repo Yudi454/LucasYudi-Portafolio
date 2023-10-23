@@ -6,17 +6,17 @@ const getComida = async (req,res) => {
     try {
         const comidas = await comidaModal.find()
         res.status(200).json(comidas)
+        console.log(comidas);
     } catch (error) {
         console.log(error);
     }
 }
 
 //POST
-
 const crearComida = async (req,res) => {
     console.log("pase por crear comida");
     try {
-        const {name,Price,Image,Description} = req.body
+        const {name,Price,Description,Image} = req.body
         const comidas = await comidaModal.find()
         const comidaRepetida = comidas.find((comida) => comida.name == name )
         if (comidaRepetida) {
@@ -28,10 +28,15 @@ const crearComida = async (req,res) => {
                 Image,
                 Description
             })
+            if (req.file) {
+                const { filename } = req.file
+                comida.setImgUrl(filename)  
+            }
             await comida.save()
             res.status(200).json({message: "Comida creada con exito"})
         }
     } catch (error) {
+        console.log(error);
         res.status(404).json({message: error})
     }
 }

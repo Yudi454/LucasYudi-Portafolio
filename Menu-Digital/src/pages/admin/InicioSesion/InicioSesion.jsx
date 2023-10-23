@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Form, Stack } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -6,10 +6,13 @@ import clsx from "clsx";
 import Swal from "sweetalert2";
 import { ProductosContext } from "../../../context/Context";
 import "../../../style/InicioSesion.css"
+import axios from "axios";
 
 const InicioSesion = () => {
-  const { Usuario } = useContext(ProductosContext);
-  //console.log(Usuario);
+  const { Usuario, PasarStates } = useContext(ProductosContext);
+  const {MostrarTabla, setMostrarTabla} = PasarStates
+
+  const back = import.meta.env.VITE_API_BACK
 
   const regexContraseña = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/;
 
@@ -39,8 +42,22 @@ const InicioSesion = () => {
     validationSchema: esquemaInicioSesion,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+      try {
+        const user = {
+          name: values.Usuario,
+          password: values.Contraseña
+        }
+
+        const response = await axios.post(`${back}/login`, user)
+
+        console.log(response.data.message);
+
+        setMostrarTabla(true)
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 

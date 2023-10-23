@@ -1,10 +1,12 @@
-import { createContext, useState } from "react"
+import axios from "axios"
+import { createContext, useEffect, useState } from "react"
 
 
 export const ProductosContext = createContext()
 
 export const ProductosProvider = ({children}) => {
   
+    const url = import.meta.env.VITE_API_BACK
     const URLComidas = import.meta.env.VITE_API_COMIDAS
     const URLBebidas = import.meta.env.VITE_API_BEBIDAS
     const URLUsuarios = import.meta.env.VITE_API_USUARIO
@@ -13,29 +15,25 @@ export const ProductosProvider = ({children}) => {
     const [Productos, setProductos] = useState()
     const [Usuario, setUsuario] = useState()
     const [MostrarInicioSesion, setMostrarInicioSesion] = useState()
-    const [MostrarTabla, setMostrarTabla] = useState(false)
+    const [MostrarTabla, setMostrarTabla] = useState(true)
+
+    
 
     const TraerProductos = async () =>{
         try {
-            const resComida = await fetch(URLComidas)
-            const resBebida = await fetch(URLBebidas)
-            const resUsuario = await fetch(URLUsuarios)
-            const usuario = await resUsuario.json()
-            const comidas = await resComida.json()
-            const bebidas = await resBebida.json()
-
-            const productos = [...comidas, ...bebidas];
-
-            setComidas(comidas)
-            setBebidas(bebidas)
-            setProductos(productos)
-            setUsuario(usuario)
+            const resComidaBack = await axios.get(`${url}/Comida`)
+            const resComida = await resComidaBack.data
+            const resBebidaBack = await axios.get(`${url}/Bebida`)
+            const resBebida = await resBebidaBack.data
+            const resUsuariosBack = await axios.get(`${url}/usuarios`)
+            const resUsuarios = await resUsuariosBack.data
+            setUsuario(resUsuarios)
+            setBebidas(resBebida)
+            setComidas(resComida)
         } catch (error) {
             console.log(error);
         }
     }
-
-
     
     const PasarStates = {
         MostrarInicioSesion,

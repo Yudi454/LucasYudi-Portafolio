@@ -37,6 +37,8 @@ app.use(express.urlencoded({ extended: true })); // permite recibir parametros e
 app.use(morgan("dev")); // brinda detalles en nuestra terminal
 app.use(cors()); // permite recibir peticiones remotas
 
+app.use("/public", express.static(`${__dirname}/public/Images`))
+
 //Rutas
 app.use(
   "/api",
