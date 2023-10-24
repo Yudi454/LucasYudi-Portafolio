@@ -6,9 +6,19 @@ const getComida = async (req,res) => {
     try {
         const comidas = await comidaModal.find()
         res.status(200).json(comidas)
-        console.log(comidas);
     } catch (error) {
         console.log(error);
+    }
+}
+
+const getComidaById = async (req,res) => {
+    console.log("pase por get comida by id");
+    try {
+        const _id = req.params.id
+        const comida = await comidaModal.findById(_id)
+        res.status(200).json(comida)
+    } catch (error) {
+        res.status(404).json({message: `${error}`})
     }
 }
 
@@ -54,6 +64,10 @@ const editarComida = async (req,res) => {
             comida.Price = Price || comida.Price;
             comida.Image = Image || comida.Image;
             comida.Description = Description || comida.Description;
+            if (req.file) {
+                const { filename } = req.file
+                comida.setImgUrl(filename)  
+            }
             await comida.save();
             res.status(200).json({message: "Comida editada con exito"})
         } else {
@@ -80,5 +94,6 @@ module.exports = {
     crearComida,
     getComida,
     editarComida,
-    deleteComida
+    deleteComida,
+    getComidaById
 } 

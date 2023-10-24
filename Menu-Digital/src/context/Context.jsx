@@ -5,7 +5,9 @@ import { createContext, useEffect, useState } from "react"
 export const ProductosContext = createContext()
 
 export const ProductosProvider = ({children}) => {
-  
+
+    const [selectId,setSelectId] = useState()  
+    const [comida, setComida] = useState()
     const url = import.meta.env.VITE_API_BACK
     const URLComidas = import.meta.env.VITE_API_COMIDAS
     const URLBebidas = import.meta.env.VITE_API_BEBIDAS
@@ -35,11 +37,26 @@ export const ProductosProvider = ({children}) => {
         }
     }
     
+    const comidaPorId = async () =>{
+        try {
+                console.log("pase por comidaporId");
+                const res = await axios.get(`${url}/Comida/${selectId}`)
+                console.log(res.data);
+                setComida(res.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const PasarStates = {
         MostrarInicioSesion,
         MostrarTabla,
         setMostrarInicioSesion,
-        setMostrarTabla
+        setMostrarTabla,
+        selectId,
+        setSelectId,
+        comida,
+        setComida
     }
 
     const PasarDatos = {
@@ -48,7 +65,8 @@ export const ProductosProvider = ({children}) => {
         TraerProductos,
         Productos,
         PasarStates,
-        Usuario
+        Usuario,
+        comidaPorId
     }
 
   return (

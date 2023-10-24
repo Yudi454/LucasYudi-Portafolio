@@ -9,7 +9,7 @@ const comida = new Schema({
     type: String,
     required: true,
     min: 4,
-    max: 15,
+    max: 20,
   },
   Price: {
     type: Number,

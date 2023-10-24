@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, Modal, Stack } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -6,25 +6,21 @@ import clsx from "clsx";
 import axios from "axios";
 import { ProductosContext } from "../../../context/Context";
 
-const CrearComida = () => {
-  const [show, setShow] = useState(false);
+const EditarComida = ({ show, setShow, handleClose }) => {
+  const { PasarStates, comidaPorId, TraerProductos } = useContext(ProductosContext);
 
-  const {TraerProductos} = useContext(ProductosContext)
+  const { selectId, setSelectId, comida, setComida } = PasarStates;
 
   const back = import.meta.env.VITE_API_BACK
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const regexSoloLetra = /^[A-Za-z]+( [A-Za-z]+)*$/;
-
+  const regexSoloLetra = /^[A-Za-z]+( [A-Za-z]+)?$/;
   const regexDescripcion = /^(?!.*\s{3,}).*$/;
 
   const esquemaComida = Yup.object().shape({
     Nombre: Yup.string()
       .required("El nombre es requerido")
       .min(4, "El Nombre debe ser igual o mayor a 4 letras")
-      .max(20, "El Nombre debe ser igual o menor a 20 digitos")
+      .max(15, "El Nombre debe ser igual o menor a 15 digitos")
       .matches(regexSoloLetra, "El nombre solo debe contener letras"),
 
     Precio: Yup.number()
@@ -38,7 +34,7 @@ const CrearComida = () => {
       .max(50, "La descripcion debe tener 50 o menos digitos")
       .matches(regexDescripcion, "No se permiten multiples espacios"),
 
-    Imagen: Yup.string().required("La imagen es requerida"),
+    Imagen: Yup.string(),
   });
 
   const valoresIniciales = {
@@ -57,39 +53,53 @@ const CrearComida = () => {
       console.log(values);
 
       try {
-
-        const formData = new FormData()
+        const formData = new FormData();
         formData.append("name", values.Nombre);
         formData.append("Price", values.Precio);
         formData.append("Description", values.Descripcion);
-        formData.append("Image", values.Imagen)
+        formData.append("Image", values.Imagen);
 
-        const response = await axios.post(`${back}/Comida`, formData,{
+        const response = await axios.put(
+          `${back}/Comida/${selectId}`,
+          formData,
+          {
             headers: {
-                "Content-Type": "multipart/form-data",
-              },
-        });
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
         TraerProductos()
         handleClose()
         formik.resetForm()
 
         console.log(response.data.message);
-
       } catch (error) {
         console.log(error);
       }
     },
   });
+
+  const establecerDatos = async () => {
+    if (comida) {
+
+        formik.setFieldValue("Nombre", comida.name),
+        formik.setFieldValue("Precio", comida.Price),
+        formik.setFieldValue("Descripcion", comida.Description)
+    }
+  }
+
+  useEffect(() => {
+    establecerDatos()
+  
+  }, [comida])
+  
+
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Crear Comida
-      </Button>
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Formulario para Crear Comida</Modal.Title>
+          <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Form onSubmit={formik.handleSubmit} noValidate>
           <Modal.Body>
@@ -101,7 +111,7 @@ const CrearComida = () => {
                   placeholder="Ingrese un nombre a la comida"
                   id="Nombre"
                   min={4}
-                  max={20}
+                  max={15}
                   {...formik.getFieldProps("Nombre")}
                   className={clsx(
                     "form-control",
@@ -182,21 +192,24 @@ const CrearComida = () => {
                   type="file"
                   name="Imagen"
                   onChange={(e) => {
-                    formik.setFieldValue("Imagen", e.currentTarget.files[0])
+                    formik.setFieldValue("Imagen", e.currentTarget.files[0]);
                   }}
                 />
                 {formik.touched.Imagen && formik.errors.Imagen && (
                   <div>
-                    <span className="text-danger">
-                      {formik.errors.Imagen}
-                    </span>
+                    <span className="text-danger">{formik.errors.Imagen}</span>
                   </div>
                 )}
               </Form.Group>
             </Stack>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              variant="secondary"
+              onClick={(e) => {
+                setSelectId(""), handleClose(), setComida(undefined);
+              }}
+            >
               Close
             </Button>
             <Button variant="primary" type="submit">
@@ -209,4 +222,4 @@ const CrearComida = () => {
   );
 };
 
-export default CrearComida;
+export default EditarComida;
