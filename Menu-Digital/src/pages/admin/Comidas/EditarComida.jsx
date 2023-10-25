@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import clsx from "clsx";
 import axios from "axios";
 import { ProductosContext } from "../../../context/Context";
+import Swal from "sweetalert2";
 
 const EditarComida = ({ show, setShow, handleClose }) => {
   const { PasarStates, comidaPorId, TraerProductos } = useContext(ProductosContext);
@@ -53,27 +54,49 @@ const EditarComida = ({ show, setShow, handleClose }) => {
       console.log(values);
 
       try {
-        const formData = new FormData();
-        formData.append("name", values.Nombre);
-        formData.append("Price", values.Precio);
-        formData.append("Description", values.Descripcion);
-        formData.append("Image", values.Imagen);
 
-        const response = await axios.put(
-          `${back}/Comida/${selectId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+        Swal.fire({
+          title: "Estas seguro de editar la comida?",
+          text: "Puede cambiar los datos actualizados luego",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, estoy seguro!",
+          cancelButtonText: "No, mejor no",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+  
+            const formData = new FormData();
+            formData.append("name", values.Nombre);
+            formData.append("Price", values.Precio);
+            formData.append("Description", values.Descripcion);
+            formData.append("Image", values.Imagen);
+    
+            const response = await axios.put(
+              `${back}/Comida/${selectId}`,
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+    
+            TraerProductos()
+            handleClose()
+            formik.resetForm()
+    
+            console.log(response.data.message);
+
+            Swal.fire(
+              "Comida eliminada!",
+              "Eliminación realzada exitosamente",
+              "success"
+            );
           }
-        );
+        });
 
-        TraerProductos()
-        handleClose()
-        formik.resetForm()
-
-        console.log(response.data.message);
       } catch (error) {
         console.log(error);
       }

@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import clsx from "clsx";
 import axios from "axios";
 import { ProductosContext } from "../../../context/Context";
+import Swal from "sweetalert2";
 
 const CrearComida = () => {
   const [show, setShow] = useState(false);
@@ -53,28 +54,47 @@ const CrearComida = () => {
     validationSchema: esquemaComida,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       console.log(values);
 
       try {
+        Swal.fire({
+          title: "Estas seguro de crear esta comida?",
+          text: "Luego la puede editar",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, estoy seguro!",
+          cancelButtonText: "No, mejor no",
+        }).then( async (result) => {
+          if (result.isConfirmed) {
 
-        const formData = new FormData()
-        formData.append("name", values.Nombre);
-        formData.append("Price", values.Precio);
-        formData.append("Description", values.Descripcion);
-        formData.append("Image", values.Imagen)
+            const formData = new FormData()
+            formData.append("name", values.Nombre);
+            formData.append("Price", values.Precio);
+            formData.append("Description", values.Descripcion);
+            formData.append("Image", values.Imagen)
+    
+            const response = await axios.post(`${back}/Comida`, formData,{
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+            });
+            
+            TraerProductos()
+            handleClose()
+            formik.resetForm()
+    
+            console.log(response.data.message);
 
-        const response = await axios.post(`${back}/Comida`, formData,{
-            headers: {
-                "Content-Type": "multipart/form-data",
-              },
+            Swal.fire(
+              "Comida creada!",
+              "Creación realzada exitosamente",
+              "success"
+            );
+          }
         });
-
-        TraerProductos()
-        handleClose()
-        formik.resetForm()
-
-        console.log(response.data.message);
 
       } catch (error) {
         console.log(error);

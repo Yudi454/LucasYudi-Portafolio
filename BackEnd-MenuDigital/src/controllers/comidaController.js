@@ -1,4 +1,6 @@
+const path = require("path");
 const comidaModal = require("../models/comidaModel")
+const fs = require("fs")
 
 //GET
 const getComida = async (req,res) => {
@@ -83,9 +85,26 @@ const deleteComida  = async(req,res) => {
     console.log("pase por delete comida");
     try {
         const id = req.params.id
-        await comidaModal.findOneAndDelete({_id: id})
-        res.status(200).json({message: "Comida eliminada con exito"})
+        const comida = await comidaModal.findOne({_id: id})
+
+        if (comida) {
+            const imageUrl = comida.Image;
+            const urlParts = imageUrl.split("/");
+            const fileName = urlParts[urlParts.length -1]
+            console.log(`Nombre del archivo = ${fileName}`);
+            const rutaArchivo = path.resolve(__dirname, "../../public/Images", fileName)
+            console.log(`Llega despues de ruta archivo y este es ${rutaArchivo}`);
+
+            fs.unlinkSync(rutaArchivo)
+
+            await comidaModal.findOneAndDelete({_id: id})
+            res.status(200).json({message: "Comida eliminada con exito"})
+        } else{
+            console.log(error);
+            res.status(404).json({message: "Comida no encontrada"})
+        }
     } catch (error) {
+        console.log(error);
         res.status(404).json({message: "No se pudo eliminar la comida"})
     }
 }
