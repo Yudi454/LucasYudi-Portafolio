@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Form, Modal, Stack } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,21 +7,25 @@ import axios from "axios";
 import { ProductosContext } from "../../../context/Context";
 import Swal from "sweetalert2";
 
-const EditarComida = ({ show, setShow, handleClose }) => {
-  const { PasarStates, comidaPorId, TraerProductos } = useContext(ProductosContext);
+const CrearBebida = () => {
+  const [show, setShow] = useState(false);
 
-  const { selectId, setSelectId, comida, setComida } = PasarStates;
+  const { TraerProductos } = useContext(ProductosContext);
 
-  const back = import.meta.env.VITE_API_BACK
+  const back = import.meta.env.VITE_API_BACK;
 
-  const regexSoloLetra = /^[A-Za-z]+( [A-Za-z]+)?$/;
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const regexSoloLetra = /^[A-Za-z]+( [A-Za-z]+)*$/;
+
   const regexDescripcion = /^(?!.*\s{3,}).*$/;
 
   const esquemaComida = Yup.object().shape({
     Nombre: Yup.string()
       .required("El nombre es requerido")
       .min(4, "El Nombre debe ser igual o mayor a 4 letras")
-      .max(15, "El Nombre debe ser igual o menor a 15 digitos")
+      .max(20, "El Nombre debe ser igual o menor a 20 digitos")
       .matches(regexSoloLetra, "El nombre solo debe contener letras"),
 
     Precio: Yup.number()
@@ -35,7 +39,7 @@ const EditarComida = ({ show, setShow, handleClose }) => {
       .max(50, "La descripcion debe tener 50 o menos digitos")
       .matches(regexDescripcion, "No se permiten multiples espacios"),
 
-    Imagen: Yup.string(),
+    Imagen: Yup.string().required("La imagen es requerida"),
   });
 
   const valoresIniciales = {
@@ -50,13 +54,13 @@ const EditarComida = ({ show, setShow, handleClose }) => {
     validationSchema: esquemaComida,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
+      console.log(values);
 
       try {
-
         Swal.fire({
-          title: "Estas seguro de editar la comida?",
-          text: "Puede cambiar los datos actualizados luego",
+          title: "Estas seguro de crear esta bebida?",
+          text: "Luego la puede editar",
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -65,64 +69,46 @@ const EditarComida = ({ show, setShow, handleClose }) => {
           cancelButtonText: "No, mejor no",
         }).then(async (result) => {
           if (result.isConfirmed) {
-  
             const formData = new FormData();
             formData.append("name", values.Nombre);
             formData.append("Price", values.Precio);
             formData.append("Description", values.Descripcion);
             formData.append("Image", values.Imagen);
-    
-            const response = await axios.put(
-              `${back}/Comida/${selectId}`,
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
-    
-            TraerProductos()
-            handleClose()
-            formik.resetForm()
-            setComida(undefined)
-            setSelectId("")
-    
+
+            const response = await axios.post(`${back}/Bebida`, formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+
+            TraerProductos();
+            handleClose();
+            formik.resetForm();
+
             console.log(response.data.message);
 
             Swal.fire(
-              "Comida eliminada!",
-              "Eliminación realzada exitosamente",
+              "Bebida creada!",
+              "Creación realzada exitosamente",
               "success"
             );
           }
         });
-
       } catch (error) {
         console.log(error);
       }
     },
   });
 
-  const establecerDatos = async () => {
-    if (comida) {
-
-        formik.setFieldValue("Nombre", comida.name),
-        formik.setFieldValue("Precio", comida.Price),
-        formik.setFieldValue("Descripcion", comida.Description)
-    }
-  }
-
-  useEffect(() => {
-    establecerDatos()
-  
-  }, [comida])
-
   return (
     <>
+      <Button variant="primary" onClick={handleShow}>
+        Crear Bebida
+      </Button>
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Formulario para Editar Comida</Modal.Title>
+          <Modal.Title>Formulario para Crear Bebida</Modal.Title>
         </Modal.Header>
         <Form onSubmit={formik.handleSubmit} noValidate>
           <Modal.Body>
@@ -131,10 +117,10 @@ const EditarComida = ({ show, setShow, handleClose }) => {
                 <Form.Label>Nombre</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Ingrese un nombre a la comida"
+                  placeholder="Ingrese un nombre a la bebida"
                   id="Nombre"
                   min={4}
-                  max={15}
+                  max={20}
                   {...formik.getFieldProps("Nombre")}
                   className={clsx(
                     "form-control",
@@ -227,12 +213,7 @@ const EditarComida = ({ show, setShow, handleClose }) => {
             </Stack>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={(e) => {
-                setSelectId(""), handleClose(), setComida(undefined);
-              }}
-            >
+            <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
             <Button variant="primary" type="submit">
@@ -245,4 +226,4 @@ const EditarComida = ({ show, setShow, handleClose }) => {
   );
 };
 
-export default EditarComida;
+export default CrearBebida;

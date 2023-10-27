@@ -28,3 +28,8 @@ table{
 .modal-dialog{
     margin-top: 15vh !important;
 }
+
+.seleccionado{
+    border: 1px solid black;
+    border-radius: 15px 15px 0px 0px;
+}

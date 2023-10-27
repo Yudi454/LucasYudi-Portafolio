@@ -9,7 +9,7 @@ const TablaComidas = () => {
   const { Comidas, PasarStates, comidaPorId, TraerProductos } =
     useContext(ProductosContext);
 
-  const { selectId, setSelectId, comida } = PasarStates;
+  const { selectId, setSelectId, comida, Bebidas } = PasarStates;
 
   const back = import.meta.env.VITE_API_BACK;
 
@@ -25,8 +25,11 @@ const TablaComidas = () => {
   const handleShow = () => setShow(true);
 
   useEffect(() => {
+
     TraerProductos();
   }, [comidaEliminada]);
+
+
 
   const indexOfLastComida = currentPage * comidasPerPage;
   const indexOfFirstComida = indexOfLastComida - comidasPerPage;
@@ -44,6 +47,7 @@ const TablaComidas = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
 
   useEffect(() => {
     if (comida == undefined && selectId) {
@@ -96,7 +100,6 @@ const TablaComidas = () => {
     }
   };
 
-  console.log(comidasMostrar);
 
   return (
     <>

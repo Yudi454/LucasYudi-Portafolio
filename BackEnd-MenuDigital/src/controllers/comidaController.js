@@ -91,9 +91,8 @@ const deleteComida  = async(req,res) => {
             const imageUrl = comida.Image;
             const urlParts = imageUrl.split("/");
             const fileName = urlParts[urlParts.length -1]
-            console.log(`Nombre del archivo = ${fileName}`);
+
             const rutaArchivo = path.resolve(__dirname, "../../public/Images", fileName)
-            console.log(`Llega despues de ruta archivo y este es ${rutaArchivo}`);
 
             fs.unlinkSync(rutaArchivo)
 

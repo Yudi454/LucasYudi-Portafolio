@@ -1,4 +1,6 @@
 const bebidaModal = require("../models/bebidaModel")
+const path = require("path");
+const fs = require("fs")
 
 //GET
 const getBebidas = async (req,res) => {
@@ -8,6 +10,17 @@ const getBebidas = async (req,res) => {
         res.status(200).json(bebidas)
     } catch (error) {
         res.status(404).json({message: `${error}`})
+    }
+}
+
+const getBebidaById = async (req,res) => {
+    console.log("pase por bebida by id");
+    try {
+        const _id = req.params.id
+        const bebida = await bebidaModal.findById(_id)
+        res.status(200).json(bebida)
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -27,10 +40,15 @@ const crearBebida = async (req,res) => {
                 Image,
                 Description
             });
+            if (req.file) {
+                const { filename } = req.file
+                bebida.setImgUrl(filename)  
+            }
             await bebida.save();
             res.status(200).json({message: "Bebida creada con exito"})
         }
     } catch (error) {
+        console.log(error);
         res.status(404).json({message: `${error}`})
     }
 }
@@ -47,6 +65,10 @@ const editarBebida = async (req,res) => {
             bebida.Price = Price || bebida.Price;
             bebida.Image = Image || bebida.Image;
             bebida.Description = Description || bebida.Description;
+            if (req.file) {
+                const { filename } = req.file
+                bebida.setImgUrl(filename)  
+            }
             await bebida.save();
             res.status(200).json({message: "Bebida editada con exito"})
         } else {
@@ -62,8 +84,23 @@ const deleteBebida = async (req,res) => {
     console.log("pase por delete bebida");
     try {
         const id = req.params.id
-        await bebidaModal.findOneAndDelete({_id: id})
-        res.status(200).json({message: "Bebida eliminada con exito"})
+        const bebida = await bebidaModal.findOne({_id: id})
+
+        if (bebida) {
+            const imageUrl = bebida.Image;
+            const urlParts = imageUrl.split("/");
+            const fileName = urlParts[urlParts.length -1]
+
+            const rutaArchivo = path.resolve(__dirname, "../../public/Images", fileName)
+
+            fs.unlinkSync(rutaArchivo)
+
+            await bebidaModal.findOneAndDelete({_id: id})
+            res.status(200).json({message: "Comida eliminada con exito"})
+        } else{
+            console.log(error);
+            res.status(404).json({message: "Comida no encontrada"})
+        }
     } catch (error) {
         res.status(404).json({message: `${error}`})
     }
@@ -73,5 +110,6 @@ module.exports = {
     crearBebida,
     getBebidas,
     editarBebida,
-    deleteBebida
+    deleteBebida,
+    getBebidaById
 }

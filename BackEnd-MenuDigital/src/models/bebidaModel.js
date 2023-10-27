@@ -1,6 +1,9 @@
 const moongose = require("mongoose");
 const { Schema } = moongose;
 
+const host = process.env.HOST;
+const port = process.env.PORT;
+
 const bebida = new Schema(
   {
     name: {
@@ -29,6 +32,10 @@ const bebida = new Schema(
     collection: "Bebidas",
   }
 );
+
+bebida.methods.setImgUrl = function setImgUrl (filename) {
+  this.Image = `${host}:${port}/public/${filename}`
+ }
 
 const bebidaModal = moongose.model("Bebidas", bebida);
 

@@ -7,17 +7,18 @@ import axios from "axios";
 import { ProductosContext } from "../../../context/Context";
 import Swal from "sweetalert2";
 
-const EditarComida = ({ show, setShow, handleClose }) => {
-  const { PasarStates, comidaPorId, TraerProductos } = useContext(ProductosContext);
+const EditarBebida = ({ show, setShow, handleClose }) => {
 
-  const { selectId, setSelectId, comida, setComida } = PasarStates;
+  const { PasarStates, bebidaPorId, TraerProductos } = useContext(ProductosContext);
+
+  const { selectId, setSelectId, bebida, setBebida } = PasarStates
 
   const back = import.meta.env.VITE_API_BACK
 
   const regexSoloLetra = /^[A-Za-z]+( [A-Za-z]+)?$/;
   const regexDescripcion = /^(?!.*\s{3,}).*$/;
 
-  const esquemaComida = Yup.object().shape({
+  const esquemaBebida = Yup.object().shape({
     Nombre: Yup.string()
       .required("El nombre es requerido")
       .min(4, "El Nombre debe ser igual o mayor a 4 letras")
@@ -47,15 +48,14 @@ const EditarComida = ({ show, setShow, handleClose }) => {
 
   const formik = useFormik({
     initialValues: valoresIniciales,
-    validationSchema: esquemaComida,
+    validationSchema: esquemaBebida,
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async (values) => {
-
       try {
 
         Swal.fire({
-          title: "Estas seguro de editar la comida?",
+          title: "Estas seguro de editar la bebida?",
           text: "Puede cambiar los datos actualizados luego",
           icon: "warning",
           showCancelButton: true,
@@ -73,7 +73,7 @@ const EditarComida = ({ show, setShow, handleClose }) => {
             formData.append("Image", values.Imagen);
     
             const response = await axios.put(
-              `${back}/Comida/${selectId}`,
+              `${back}/Bebida/${selectId}`,
               formData,
               {
                 headers: {
@@ -85,13 +85,13 @@ const EditarComida = ({ show, setShow, handleClose }) => {
             TraerProductos()
             handleClose()
             formik.resetForm()
-            setComida(undefined)
+            setBebida(undefined)
             setSelectId("")
     
             console.log(response.data.message);
 
             Swal.fire(
-              "Comida eliminada!",
+              "Bebida eliminada!",
               "Eliminación realzada exitosamente",
               "success"
             );
@@ -105,24 +105,24 @@ const EditarComida = ({ show, setShow, handleClose }) => {
   });
 
   const establecerDatos = async () => {
-    if (comida) {
+    if (bebida) {
 
-        formik.setFieldValue("Nombre", comida.name),
-        formik.setFieldValue("Precio", comida.Price),
-        formik.setFieldValue("Descripcion", comida.Description)
+        formik.setFieldValue("Nombre", bebida.name),
+        formik.setFieldValue("Precio", bebida.Price),
+        formik.setFieldValue("Descripcion", bebida.Description)
     }
   }
 
   useEffect(() => {
     establecerDatos()
   
-  }, [comida])
+  }, [bebida])
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Formulario para Editar Comida</Modal.Title>
+          <Modal.Title>Formulario para Editar Bebida</Modal.Title>
         </Modal.Header>
         <Form onSubmit={formik.handleSubmit} noValidate>
           <Modal.Body>
@@ -131,7 +131,7 @@ const EditarComida = ({ show, setShow, handleClose }) => {
                 <Form.Label>Nombre</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Ingrese un nombre a la comida"
+                  placeholder="Ingrese un nombre a la bebida"
                   id="Nombre"
                   min={4}
                   max={15}
@@ -230,7 +230,7 @@ const EditarComida = ({ show, setShow, handleClose }) => {
             <Button
               variant="secondary"
               onClick={(e) => {
-                setSelectId(""), handleClose(), setComida(undefined);
+                setSelectId(""), handleClose(), setBebida(undefined);
               }}
             >
               Close
@@ -242,7 +242,7 @@ const EditarComida = ({ show, setShow, handleClose }) => {
         </Form>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default EditarComida;
+export default EditarBebida
