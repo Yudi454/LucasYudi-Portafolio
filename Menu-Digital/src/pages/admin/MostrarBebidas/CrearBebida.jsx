@@ -21,7 +21,7 @@ const CrearBebida = () => {
 
   const regexDescripcion = /^(?!.*\s{3,}).*$/;
 
-  const esquemaComida = Yup.object().shape({
+  const esquemaBebida = Yup.object().shape({
     Nombre: Yup.string()
       .required("El nombre es requerido")
       .min(4, "El Nombre debe ser igual o mayor a 4 letras")
@@ -51,7 +51,7 @@ const CrearBebida = () => {
 
   const formik = useFormik({
     initialValues: valoresIniciales,
-    validationSchema: esquemaComida,
+    validationSchema: esquemaBebida,
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values) => {

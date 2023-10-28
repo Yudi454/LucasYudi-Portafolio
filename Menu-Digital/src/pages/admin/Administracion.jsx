@@ -7,6 +7,8 @@ import CrearComida from "./Comidas/CrearComida";
 import { Col, Row } from "react-bootstrap";
 import TablaBebidas from "./MostrarBebidas/TablaBebidas";
 import CrearBebida from "./MostrarBebidas/CrearBebida";
+import TablaUsuarios from "./MostrarUsuarios/TablaUsuarios";
+import CrearUsuario from "./MostrarUsuarios/CrearUsuario";
 
 const Administracion = () => {
   const { PasarStates, Comidas, Bebidas, TraerProductos } =
@@ -63,11 +65,17 @@ const Administracion = () => {
             <CrearComida />
             <TablaComidas />
           </div>
-          ): seleccionado ==="bebida" && (
+          ): seleccionado ==="bebida" ? (
             <div className="text-center">
               <h1>Tabla de bebidas</h1>
               <CrearBebida />
               <TablaBebidas />
+            </div>
+          ): seleccionado === "usuarios" && (
+            <div className="text-center">
+              <h1>Tabla Usuarios</h1>
+              <CrearUsuario />
+              <TablaUsuarios />
             </div>
           )}
         </>

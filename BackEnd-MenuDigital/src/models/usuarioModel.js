@@ -5,7 +5,9 @@ const usuario = new Schema ({
     name: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        min: 5,
+        max: 15
     },
     passwordHash: {
         type: String,

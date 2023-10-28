@@ -15,7 +15,7 @@ export const ProductosProvider = ({children}) => {
     const URLUsuarios = import.meta.env.VITE_API_USUARIO
     const [Comidas, setComidas] = useState()
     const [Bebidas, setBebidas] = useState()
-    const [Productos, setProductos] = useState()
+    const [Usuarios, setUsuarios] = useState()
     const [Usuario, setUsuario] = useState()
     const [MostrarInicioSesion, setMostrarInicioSesion] = useState()
     const [MostrarTabla, setMostrarTabla] = useState(true)
@@ -31,7 +31,7 @@ export const ProductosProvider = ({children}) => {
             const resBebida = await resBebidaBack.data
             const resUsuariosBack = await axios.get(`${url}/usuarios`)
             const resUsuarios = await resUsuariosBack.data
-            setUsuario(resUsuarios)
+            setUsuarios(resUsuarios)
             setBebidas(resBebida)
             setComidas(resComida)
         } catch (error) {
@@ -57,6 +57,15 @@ export const ProductosProvider = ({children}) => {
         }
     }
 
+    const usuarioPorId = async () => {
+        try {
+            const res = await axios.get(`${url}/usuarios/${selectId}`)
+            setUsuario(res.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const PasarStates = {
         MostrarInicioSesion,
         MostrarTabla,
@@ -67,18 +76,21 @@ export const ProductosProvider = ({children}) => {
         comida,
         bebida,
         setBebida,
-        setComida
+        setComida,
+        Usuario,
+        setUsuario,
+        Usuarios
+
     }
 
     const PasarDatos = {
         Comidas,
         Bebidas,
         TraerProductos,
-        Productos,
         PasarStates,
-        Usuario,
         comidaPorId,
-        bebidaPorId
+        bebidaPorId,
+        usuarioPorId
     }
 
   return (

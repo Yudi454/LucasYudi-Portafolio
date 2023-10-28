@@ -8,6 +8,13 @@ table{
     justify-content: center;
 }
 
+.Contenedor-Tabla-Usuario{
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+
+}
+
 .imagenTablas{
     width: 14vh !important;
 }

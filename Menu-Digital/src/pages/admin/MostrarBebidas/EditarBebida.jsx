@@ -91,8 +91,8 @@ const EditarBebida = ({ show, setShow, handleClose }) => {
             console.log(response.data.message);
 
             Swal.fire(
-              "Bebida eliminada!",
-              "Eliminación realzada exitosamente",
+              "Bebida Modificada!",
+              "Modificación realzada exitosamente",
               "success"
             );
           }
